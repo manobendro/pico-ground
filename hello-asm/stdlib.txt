@@ -1,0 +1,284 @@
+
+CMakeFiles/hello-asm.dir/workspaces/pico-sdk/src/rp2_common/pico_stdlib/stdlib.c.obj:     file format elf32-littlearm
+
+
+Disassembly of section .text.set_sys_clock_48mhz:
+
+00000000 <set_sys_clock_48mhz>:
+   0:	b510      	push	{r4, lr}
+   2:	b082      	sub	sp, #8
+   4:	f7ff fffe 	bl	0 <running_on_fpga>
+   8:	2800      	cmp	r0, #0
+   a:	d001      	beq.n	10 <set_sys_clock_48mhz+0x10>
+   c:	b002      	add	sp, #8
+   e:	bd10      	pop	{r4, pc}
+  10:	4c09      	ldr	r4, [pc, #36]	; (38 <set_sys_clock_48mhz+0x38>)
+  12:	2201      	movs	r2, #1
+  14:	0023      	movs	r3, r4
+  16:	2101      	movs	r1, #1
+  18:	9400      	str	r4, [sp, #0]
+  1a:	3005      	adds	r0, #5
+  1c:	f7ff fffe 	bl	0 <clock_configure>
+  20:	4806      	ldr	r0, [pc, #24]	; (3c <set_sys_clock_48mhz+0x3c>)
+  22:	f7ff fffe 	bl	0 <pll_deinit>
+  26:	0023      	movs	r3, r4
+  28:	2200      	movs	r2, #0
+  2a:	2100      	movs	r1, #0
+  2c:	9400      	str	r4, [sp, #0]
+  2e:	2006      	movs	r0, #6
+  30:	f7ff fffe 	bl	0 <clock_configure>
+  34:	e7ea      	b.n	c <set_sys_clock_48mhz+0xc>
+  36:	46c0      	nop			; (mov r8, r8)
+  38:	02dc6c00 	.word	0x02dc6c00
+  3c:	40028000 	.word	0x40028000
+
+Disassembly of section .text.set_sys_clock_pll:
+
+00000000 <set_sys_clock_pll>:
+   0:	b5f0      	push	{r4, r5, r6, r7, lr}
+   2:	b083      	sub	sp, #12
+   4:	0005      	movs	r5, r0
+   6:	000e      	movs	r6, r1
+   8:	0014      	movs	r4, r2
+   a:	f7ff fffe 	bl	0 <running_on_fpga>
+   e:	2800      	cmp	r0, #0
+  10:	d001      	beq.n	16 <set_sys_clock_pll+0x16>
+  12:	b003      	add	sp, #12
+  14:	bdf0      	pop	{r4, r5, r6, r7, pc}
+  16:	4f15      	ldr	r7, [pc, #84]	; (6c <set_sys_clock_pll+0x6c>)
+  18:	2201      	movs	r2, #1
+  1a:	003b      	movs	r3, r7
+  1c:	2101      	movs	r1, #1
+  1e:	9700      	str	r7, [sp, #0]
+  20:	3005      	adds	r0, #5
+  22:	f7ff fffe 	bl	0 <clock_configure>
+  26:	0033      	movs	r3, r6
+  28:	002a      	movs	r2, r5
+  2a:	9400      	str	r4, [sp, #0]
+  2c:	2101      	movs	r1, #1
+  2e:	4810      	ldr	r0, [pc, #64]	; (70 <set_sys_clock_pll+0x70>)
+  30:	f7ff fffe 	bl	0 <pll_init>
+  34:	0021      	movs	r1, r4
+  36:	0028      	movs	r0, r5
+  38:	4371      	muls	r1, r6
+  3a:	f7ff fffe 	bl	0 <__aeabi_uidiv>
+  3e:	0004      	movs	r4, r0
+  40:	4b0c      	ldr	r3, [pc, #48]	; (74 <set_sys_clock_pll+0x74>)
+  42:	2200      	movs	r2, #0
+  44:	9300      	str	r3, [sp, #0]
+  46:	2102      	movs	r1, #2
+  48:	2004      	movs	r0, #4
+  4a:	f7ff fffe 	bl	0 <clock_configure>
+  4e:	0023      	movs	r3, r4
+  50:	2200      	movs	r2, #0
+  52:	2101      	movs	r1, #1
+  54:	9400      	str	r4, [sp, #0]
+  56:	2005      	movs	r0, #5
+  58:	f7ff fffe 	bl	0 <clock_configure>
+  5c:	003b      	movs	r3, r7
+  5e:	2202      	movs	r2, #2
+  60:	2100      	movs	r1, #0
+  62:	9700      	str	r7, [sp, #0]
+  64:	2006      	movs	r0, #6
+  66:	f7ff fffe 	bl	0 <clock_configure>
+  6a:	e7d2      	b.n	12 <set_sys_clock_pll+0x12>
+  6c:	02dc6c00 	.word	0x02dc6c00
+  70:	40028000 	.word	0x40028000
+  74:	00b71b00 	.word	0x00b71b00
+
+Disassembly of section .text.check_sys_clock_khz:
+
+00000000 <check_sys_clock_khz>:
+   0:	b5f0      	push	{r4, r5, r6, r7, lr}
+   2:	46de      	mov	lr, fp
+   4:	469b      	mov	fp, r3
+   6:	4b55      	ldr	r3, [pc, #340]	; (15c <check_sys_clock_khz+0x15c>)
+   8:	4657      	mov	r7, sl
+   a:	469a      	mov	sl, r3
+   c:	23a0      	movs	r3, #160	; 0xa0
+   e:	464e      	mov	r6, r9
+  10:	4645      	mov	r5, r8
+  12:	005b      	lsls	r3, r3, #1
+  14:	b5e0      	push	{r5, r6, r7, lr}
+  16:	4699      	mov	r9, r3
+  18:	0006      	movs	r6, r0
+  1a:	b083      	sub	sp, #12
+  1c:	9100      	str	r1, [sp, #0]
+  1e:	9201      	str	r2, [sp, #4]
+  20:	2301      	movs	r3, #1
+  22:	425b      	negs	r3, r3
+  24:	469c      	mov	ip, r3
+  26:	44e1      	add	r9, ip
+  28:	464b      	mov	r3, r9
+  2a:	2b0f      	cmp	r3, #15
+  2c:	d100      	bne.n	30 <check_sys_clock_khz+0x30>
+  2e:	e092      	b.n	156 <check_sys_clock_khz+0x156>
+  30:	4f4b      	ldr	r7, [pc, #300]	; (160 <check_sys_clock_khz+0x160>)
+  32:	4b4c      	ldr	r3, [pc, #304]	; (164 <check_sys_clock_khz+0x164>)
+  34:	2407      	movs	r4, #7
+  36:	4457      	add	r7, sl
+  38:	459a      	cmp	sl, r3
+  3a:	d85e      	bhi.n	fa <check_sys_clock_khz+0xfa>
+  3c:	0021      	movs	r1, r4
+  3e:	0038      	movs	r0, r7
+  40:	4361      	muls	r1, r4
+  42:	f7ff fffe 	bl	0 <__aeabi_uidivmod>
+  46:	4286      	cmp	r6, r0
+  48:	d05b      	beq.n	102 <check_sys_clock_khz+0x102>
+  4a:	1e63      	subs	r3, r4, #1
+  4c:	4698      	mov	r8, r3
+  4e:	2c01      	cmp	r4, #1
+  50:	d053      	beq.n	fa <check_sys_clock_khz+0xfa>
+  52:	001d      	movs	r5, r3
+  54:	4365      	muls	r5, r4
+  56:	0038      	movs	r0, r7
+  58:	0029      	movs	r1, r5
+  5a:	f7ff fffe 	bl	0 <__aeabi_uidivmod>
+  5e:	4286      	cmp	r6, r0
+  60:	d053      	beq.n	10a <check_sys_clock_khz+0x10a>
+  62:	1ea3      	subs	r3, r4, #2
+  64:	4698      	mov	r8, r3
+  66:	2c02      	cmp	r4, #2
+  68:	d055      	beq.n	116 <check_sys_clock_khz+0x116>
+  6a:	1b2d      	subs	r5, r5, r4
+  6c:	0029      	movs	r1, r5
+  6e:	0038      	movs	r0, r7
+  70:	f7ff fffe 	bl	0 <__aeabi_uidivmod>
+  74:	4286      	cmp	r6, r0
+  76:	d050      	beq.n	11a <check_sys_clock_khz+0x11a>
+  78:	1ee3      	subs	r3, r4, #3
+  7a:	4698      	mov	r8, r3
+  7c:	2c03      	cmp	r4, #3
+  7e:	d052      	beq.n	126 <check_sys_clock_khz+0x126>
+  80:	1b2d      	subs	r5, r5, r4
+  82:	0029      	movs	r1, r5
+  84:	0038      	movs	r0, r7
+  86:	f7ff fffe 	bl	0 <__aeabi_uidivmod>
+  8a:	4286      	cmp	r6, r0
+  8c:	d04d      	beq.n	12a <check_sys_clock_khz+0x12a>
+  8e:	1f23      	subs	r3, r4, #4
+  90:	4698      	mov	r8, r3
+  92:	2c04      	cmp	r4, #4
+  94:	d04f      	beq.n	136 <check_sys_clock_khz+0x136>
+  96:	1b2d      	subs	r5, r5, r4
+  98:	0029      	movs	r1, r5
+  9a:	0038      	movs	r0, r7
+  9c:	f7ff fffe 	bl	0 <__aeabi_uidivmod>
+  a0:	4286      	cmp	r6, r0
+  a2:	d04a      	beq.n	13a <check_sys_clock_khz+0x13a>
+  a4:	1f63      	subs	r3, r4, #5
+  a6:	4698      	mov	r8, r3
+  a8:	2c05      	cmp	r4, #5
+  aa:	d04c      	beq.n	146 <check_sys_clock_khz+0x146>
+  ac:	1b2d      	subs	r5, r5, r4
+  ae:	0029      	movs	r1, r5
+  b0:	0038      	movs	r0, r7
+  b2:	f7ff fffe 	bl	0 <__aeabi_uidivmod>
+  b6:	4286      	cmp	r6, r0
+  b8:	d047      	beq.n	14a <check_sys_clock_khz+0x14a>
+  ba:	2c06      	cmp	r4, #6
+  bc:	d049      	beq.n	152 <check_sys_clock_khz+0x152>
+  be:	0038      	movs	r0, r7
+  c0:	1fe9      	subs	r1, r5, #7
+  c2:	f7ff fffe 	bl	0 <__aeabi_uidivmod>
+  c6:	2406      	movs	r4, #6
+  c8:	4286      	cmp	r6, r0
+  ca:	d1b7      	bne.n	3c <check_sys_clock_khz+0x3c>
+  cc:	2900      	cmp	r1, #0
+  ce:	d1b5      	bne.n	3c <check_sys_clock_khz+0x3c>
+  d0:	2301      	movs	r3, #1
+  d2:	2407      	movs	r4, #7
+  d4:	4698      	mov	r8, r3
+  d6:	464a      	mov	r2, r9
+  d8:	4b23      	ldr	r3, [pc, #140]	; (168 <check_sys_clock_khz+0x168>)
+  da:	2001      	movs	r0, #1
+  dc:	4353      	muls	r3, r2
+  de:	9a00      	ldr	r2, [sp, #0]
+  e0:	6013      	str	r3, [r2, #0]
+  e2:	9b01      	ldr	r3, [sp, #4]
+  e4:	4642      	mov	r2, r8
+  e6:	601c      	str	r4, [r3, #0]
+  e8:	465b      	mov	r3, fp
+  ea:	601a      	str	r2, [r3, #0]
+  ec:	b003      	add	sp, #12
+  ee:	bc3c      	pop	{r2, r3, r4, r5}
+  f0:	4690      	mov	r8, r2
+  f2:	4699      	mov	r9, r3
+  f4:	46a2      	mov	sl, r4
+  f6:	46ab      	mov	fp, r5
+  f8:	bdf0      	pop	{r4, r5, r6, r7, pc}
+  fa:	4b1c      	ldr	r3, [pc, #112]	; (16c <check_sys_clock_khz+0x16c>)
+  fc:	469c      	mov	ip, r3
+  fe:	44e2      	add	sl, ip
+ 100:	e78e      	b.n	20 <check_sys_clock_khz+0x20>
+ 102:	2900      	cmp	r1, #0
+ 104:	d1a1      	bne.n	4a <check_sys_clock_khz+0x4a>
+ 106:	46a0      	mov	r8, r4
+ 108:	e7e5      	b.n	d6 <check_sys_clock_khz+0xd6>
+ 10a:	2900      	cmp	r1, #0
+ 10c:	d0e3      	beq.n	d6 <check_sys_clock_khz+0xd6>
+ 10e:	1ea3      	subs	r3, r4, #2
+ 110:	4698      	mov	r8, r3
+ 112:	2c02      	cmp	r4, #2
+ 114:	d1a9      	bne.n	6a <check_sys_clock_khz+0x6a>
+ 116:	2401      	movs	r4, #1
+ 118:	e790      	b.n	3c <check_sys_clock_khz+0x3c>
+ 11a:	2900      	cmp	r1, #0
+ 11c:	d0db      	beq.n	d6 <check_sys_clock_khz+0xd6>
+ 11e:	1ee3      	subs	r3, r4, #3
+ 120:	4698      	mov	r8, r3
+ 122:	2c03      	cmp	r4, #3
+ 124:	d1ac      	bne.n	80 <check_sys_clock_khz+0x80>
+ 126:	2402      	movs	r4, #2
+ 128:	e788      	b.n	3c <check_sys_clock_khz+0x3c>
+ 12a:	2900      	cmp	r1, #0
+ 12c:	d0d3      	beq.n	d6 <check_sys_clock_khz+0xd6>
+ 12e:	1f23      	subs	r3, r4, #4
+ 130:	4698      	mov	r8, r3
+ 132:	2c04      	cmp	r4, #4
+ 134:	d1af      	bne.n	96 <check_sys_clock_khz+0x96>
+ 136:	2403      	movs	r4, #3
+ 138:	e780      	b.n	3c <check_sys_clock_khz+0x3c>
+ 13a:	2900      	cmp	r1, #0
+ 13c:	d0cb      	beq.n	d6 <check_sys_clock_khz+0xd6>
+ 13e:	1f63      	subs	r3, r4, #5
+ 140:	4698      	mov	r8, r3
+ 142:	2c05      	cmp	r4, #5
+ 144:	d1b2      	bne.n	ac <check_sys_clock_khz+0xac>
+ 146:	2404      	movs	r4, #4
+ 148:	e778      	b.n	3c <check_sys_clock_khz+0x3c>
+ 14a:	2900      	cmp	r1, #0
+ 14c:	d0c3      	beq.n	d6 <check_sys_clock_khz+0xd6>
+ 14e:	2c06      	cmp	r4, #6
+ 150:	d1b5      	bne.n	be <check_sys_clock_khz+0xbe>
+ 152:	2405      	movs	r4, #5
+ 154:	e772      	b.n	3c <check_sys_clock_khz+0x3c>
+ 156:	2000      	movs	r0, #0
+ 158:	e7c8      	b.n	ec <check_sys_clock_khz+0xec>
+ 15a:	46c0      	nop			; (mov r8, r8)
+ 15c:	002ef770 	.word	0x002ef770
+ 160:	000b71b0 	.word	0x000b71b0
+ 164:	000cf850 	.word	0x000cf850
+ 168:	00b71b00 	.word	0x00b71b00
+ 16c:	ffffd120 	.word	0xffffd120
+
+Disassembly of section .text.setup_default_uart:
+
+00000000 <setup_default_uart>:
+   0:	21e1      	movs	r1, #225	; 0xe1
+   2:	b510      	push	{r4, lr}
+   4:	0249      	lsls	r1, r1, #9
+   6:	4807      	ldr	r0, [pc, #28]	; (24 <setup_default_uart+0x24>)
+   8:	f7ff fffe 	bl	0 <uart_init>
+   c:	2102      	movs	r1, #2
+   e:	2000      	movs	r0, #0
+  10:	f7ff fffe 	bl	0 <gpio_set_function>
+  14:	2102      	movs	r1, #2
+  16:	2001      	movs	r0, #1
+  18:	f7ff fffe 	bl	0 <gpio_set_function>
+  1c:	4b02      	ldr	r3, [pc, #8]	; (28 <setup_default_uart+0x28>)
+  1e:	781b      	ldrb	r3, [r3, #0]
+  20:	bd10      	pop	{r4, pc}
+  22:	46c0      	nop			; (mov r8, r8)
+  24:	40034000 	.word	0x40034000
+  28:	00000000 	.word	0x00000000

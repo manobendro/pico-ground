@@ -1,0 +1,34 @@
+# Excluding avr gnu tools chain
+avr/
+
+# Exclude all build directories
+build/
+
+# Exclude build directories in any subdirectory
+**/build/
+
+# Exclude all object files
+*.o
+
+# Optional: Exclude other common build artifacts
+*.obj
+*.dll
+*.exe
+*.so
+*.dylib
+*.lib
+*.a
+*.out
+*.log
+
+# Visual Studio
+.vscode/
+*.vcxproj
+*.vcxproj.user
+*.vcxproj.filters
+*.pdb
+*.sdf
+*.ipch
+*.opensdf
+*.VC.db
+*.VC.VC.opendb
