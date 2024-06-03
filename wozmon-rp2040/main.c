@@ -13,9 +13,32 @@ char buff[BUFFER_SIZE];
 void init_uart(void);
 char uart_read_char(void);
 void send_back_buffer(void);
+// Math function
+int add(int, int);
+int sub(int, int);
+
+typedef struct _math_table_t{
+    int (*add)(int, int);
+    int (*sub)(int, int);
+} math_table_t;
+
+__attribute__((section(".math"))) math_table_t math_table;
 
 int main() {
     init_uart();
+
+    math_table.add = add;
+    math_table.sub = sub;
+    
+    math_table_t * math = (math_table_t *)0x2003D800;
+
+    uart_putc_raw(UART_ID, math->add(5, 4) + 0x30 );
+    uart_putc_raw(UART_ID, '\n' );
+    uart_putc_raw(UART_ID, '\r' );
+    uart_putc_raw(UART_ID, math->sub(5, 4) + 0x30 );
+    uart_putc_raw(UART_ID, '\n' );
+    uart_putc_raw(UART_ID, '\r' );
+
 
     int buffer_index = 0;
     while (true) {
@@ -66,4 +89,11 @@ void send_back_buffer(void) {
         uart_putc_raw(UART_ID, buff[len]);
         len++;
     }
+}
+
+int add(int a, int b){
+    return a + b;
+}
+int sub(int a, int b){
+    return a - b;
 }

@@ -24,7 +24,8 @@
 MEMORY
 {
     FLASH(rx) : ORIGIN = 0x10000000, LENGTH = 2048k
-    RAM(rwx) : ORIGIN =  0x20000000, LENGTH = 256k
+    RAM (rwx)  : ORIGIN = 0x20000000, LENGTH = 246K
+    MATH (rwx) : ORIGIN = 0x2003D800, LENGTH = 10K
     SCRATCH_X(rwx) : ORIGIN = 0x20040000, LENGTH = 4k
     SCRATCH_Y(rwx) : ORIGIN = 0x20041000, LENGTH = 4k
 }
@@ -233,6 +234,10 @@ SECTIONS
     .flash_end : {
         PROVIDE(__flash_binary_end = .);
     } > FLASH
+
+    .math (NOLOAD): {
+        KEEP(*(.math*))
+    } > MATH
 
     /* stack limit is poorly named, but historically is maximum heap ptr */
     __StackLimit = ORIGIN(RAM) + LENGTH(RAM);

@@ -3,8 +3,8 @@
         - Install Pico sdk
         -   cd ..
             git clone https://github.com/raspberrypi/pico-sdk.git
-            git submodule update --remote
         -   cd pico-sdk
+            git submodule update --remote
         -   export PICO_SDK_PATH=`pwd`
 
         - Pico SDK dependecy
