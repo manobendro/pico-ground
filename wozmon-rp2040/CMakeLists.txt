@@ -1,8 +1,11 @@
 # CMake minimum version 3.13
 cmake_minimum_required(VERSION 3.13)
 
-# Setting pico sdk path
-set(PICO_SDK_PATH /workspaces/pico-sdk)
+# Setting pico sdk path for github
+#set(PICO_SDK_PATH /workspaces/pico-sdk)
+
+# Setting pico sdk path for gitpod
+set(PICO_SDK_PATH /workspace/pico-sdk)
 
 # Selecting wshare rp2040 zero
 set(PICO_BOARD "waveshare_rp2040_zero")

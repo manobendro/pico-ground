@@ -1,0 +1,5 @@
+[wokwi]
+version = 1
+firmware = 'wozmon-rp2040/build/wozmon-rp2040.hex'
+elf = 'wozmon-rp2040/build/wozmon-rp2040.elf'
+gdbServerPort=3333
