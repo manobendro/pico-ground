@@ -29,17 +29,22 @@ include_directories(${CMAKE_SOURCE_DIR})
 # add src to executable
 add_executable(wozmon-rp2040
   main.c
+  wozmon.c
 )
 
 # Disabling uart and enabling usb serial
-pico_enable_stdio_uart(wozmon-rp2040 0)
-pico_enable_stdio_usb(wozmon-rp2040 1)
+pico_enable_stdio_uart(wozmon-rp2040 1)
+pico_enable_stdio_usb(wozmon-rp2040 0)
 
 # Generate uf2 file 
 pico_add_extra_outputs(wozmon-rp2040)
 
 # Specify the path to your custom linker script
 set(WOZMON_LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/wozmon_linker.ld)
+
+# No flash linker script
+# pico_set_binary_type(wozmon-rp2040 no_flash)
+# set(WOZMON_LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/memmap_no_flash.ld)
 
 # Override the default linker script
 pico_set_linker_script(wozmon-rp2040 ${WOZMON_LINKER_SCRIPT})
