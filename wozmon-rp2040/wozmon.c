@@ -103,18 +103,19 @@ void parse_and_execute_command() {
             // Handle BLOCK XAM mode
             // memory[MODE] = 0xAE;
             MODE = 0xAE;
-            
+            y++;
         } else if (ch == ':') {
             // Handle STOR mode
             // memory[MODE] = 0x7F;
             MODE = 0x7F;
             STL = L;
             STH = H;
+            y++;
         } else if (ch == 'R') {
             // Run user program
             uint16_t addr = (XAMH << 8) | XAML;
             run_program(addr);
-        } else {
+        } else if ((ch >= '0' && ch <= '9') || (ch >= 'A' && ch <= 'F')){
             // Handle hex parsing
             parse_hex(&y);
 
@@ -142,8 +143,8 @@ void parse_and_execute_command() {
                     echo(' ');
                     // prhex 8 times or less
                     uint8_t num_b = 1;
-                    if((TEMP - XAM) > 8){
-                        num_b += 8;
+                    if((TEMP - XAM) >= 8){
+                        num_b = 8;
                     }else{
                         num_b += (TEMP - XAM);
                     }
@@ -161,12 +162,15 @@ void parse_and_execute_command() {
                 XAML = XAML;
                 MODE = 0x00; // back to normal mode.
             }
+        }else{
+            y++;
         }
     }
 }
 
 void parse_hex(uint8_t *y) {
     // uint8_t digit_count = 0;
+    // *y--;
     L = 0;
     H = 0;
     uint8_t ch;
@@ -177,7 +181,7 @@ void parse_hex(uint8_t *y) {
             ch = ch - '0';
         } else if (ch >= 'A' && ch <= 'F') {
             ch = ch - 'A' + 10;
-        } else {
+        }else{
             break;
         }
 

@@ -4,6 +4,9 @@ cmake_minimum_required(VERSION 3.13)
 # Setting pico sdk path for github
 #set(PICO_SDK_PATH /workspaces/pico-sdk)
 
+# Setting build type
+set(CMAKE_BUILD_TYPE Debug)
+
 # Setting pico sdk path for gitpod
 set(PICO_SDK_PATH /workspace/pico-sdk)
 
