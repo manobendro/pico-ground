@@ -8,37 +8,95 @@
       "id": "pico",
       "top": 20,
       "left": 60,
-      "attrs": { "env": "arduino-community" }
+      "attrs": {
+        "env": "arduino-community"
+      }
     },
     {
       "type": "wokwi-led",
       "id": "led1",
       "top": 3,
       "left": 0,
-      "attrs": { "color": "red" }
+      "attrs": {
+        "color": "red"
+      }
     },
     {
       "type": "wokwi-led",
       "id": "led2",
       "top": 48,
       "left": 0,
-      "attrs": { "color": "yellow" }
+      "attrs": {
+        "color": "yellow"
+      }
     },
     {
       "type": "wokwi-led",
       "id": "led3",
       "top": 98,
       "left": 0,
-      "attrs": { "color": "green" }
+      "attrs": {
+        "color": "green"
+      }
     }
   ],
   "connections": [
-    [ "pico:GND.1", "led1:C", "black", [] ],
-    [ "pico:GP1", "led1:A", "blue", [] ],
-    [ "pico:GND.2", "led2:C", "black", [] ],
-    [ "pico:GP5", "led2:A", "blue", [] ],
-    [ "pico:GND.3", "led3:C", "black", [] ],
-    [ "pico:GP9", "led3:A", "blue", [] ],
-    [ "$serialMonitor:RX", "pico:GP0", "", [] ]
-  ]
+    [
+      "pico:GND.1",
+      "led1:C",
+      "black",
+      []
+    ],
+    [
+      "pico:GP2",
+      "led1:A",
+      "blue",
+      [
+        "h-27.6",
+        "v-16.55"
+      ]
+    ],
+    [
+      "pico:GND.2",
+      "led2:C",
+      "black",
+      []
+    ],
+    [
+      "pico:GP5",
+      "led2:A",
+      "blue",
+      []
+    ],
+    [
+      "pico:GND.3",
+      "led3:C",
+      "black",
+      []
+    ],
+    [
+      "pico:GP9",
+      "led3:A",
+      "blue",
+      []
+    ],
+    [
+      "$serialMonitor:RX",
+      "pico:GP0",
+      "",
+      []
+    ],
+    [
+      "$serialMonitor:TX",
+      "pico:GP1",
+      "",
+      []
+    ]
+  ],
+  "dependencies": {},
+  "serialMonitor": {
+    "display": "auto",
+    "newline": "none",
+    "convertEol": true
+  }
 }
