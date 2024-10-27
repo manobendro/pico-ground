@@ -8,7 +8,7 @@ cmake_minimum_required(VERSION 3.13)
 set(CMAKE_BUILD_TYPE Debug)
 
 # Setting pico sdk path for gitpod
-set(PICO_SDK_PATH /workspace/pico-sdk)
+set(PICO_SDK_PATH /workspace/pico-ground/lib/pico-sdk)
 
 # Selecting wshare rp2040 zero
 set(PICO_BOARD "waveshare_rp2040_zero")

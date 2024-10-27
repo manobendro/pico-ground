@@ -11,9 +11,11 @@
 
         - Pico SDK dependecy
             --
+        - Build command
+            -- Create a build folder inside project folder `mkdir build`
+            -- Go to build folder `cd build`
+            -- Generate make build script `cmake ..`
+            -- Then build `make` 
 
         -- AVR GCC
             -- https://ww1.microchip.com/downloads/aemDocuments/documents/DEV/ProductDocuments/SoftwareTools/avr8-gnu-toolchain-3.7.0.1796-linux.any.x86_64.tar.gz
-
-        -- HARDFAULT
-            -- https://www.diffchecker.com/vI57Yewd/
