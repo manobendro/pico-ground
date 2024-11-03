@@ -45,7 +45,10 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
+#include <string.h> 
+// For ADC input:
+#include "hardware/adc.h"
+#include "hardware/dma.h"
 
 #include "bsp/board_api.h"
 #include "tusb.h"
