@@ -46,9 +46,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h> 
+
 // For ADC input:
 #include "hardware/adc.h"
 #include "hardware/dma.h"
+#include "hardware/irq.h"
 
 #include "bsp/board_api.h"
 #include "tusb.h"
@@ -86,10 +88,31 @@ const tusb_desc_webusb_url_t desc_url =
 
 static bool web_serial_connected = false;
 
+// Define buffer size and buffers
+#define BUFFER_SIZE 256
+uint16_t buffer1[BUFFER_SIZE];
+uint16_t buffer2[BUFFER_SIZE];
+
+// DMA channel and configuration
+uint dma_channel;
+dma_channel_config dma_config;
+
+// Pointer to the current buffer being filled
+uint16_t* current_buffer;
+uint16_t* next_buffer;
+
+// Flag to indicate buffer state
+volatile bool buffer_filled = false;
+
 //------------- prototypes -------------//
+void echo_all(uint8_t buf[], uint32_t count);
 void led_blinking_task(void);
 void cdc_task(void);
 void webserial_task(void);
+
+void dma_handler(void);
+void setup_adc_dma(void);
+void send_data_to_usb(void);
 
 /*------------- MAIN -------------*/
 int main(void)
@@ -103,6 +126,11 @@ int main(void)
     board_init_after_tusb();
   }
 
+  //Config & Enabled ADC, DMA.
+  //Must be enabled after vendor connected..
+
+  setup_adc_dma();
+
   while (1)
   {
     tud_task(); // tinyusb device task
@@ -111,10 +139,93 @@ int main(void)
     led_blinking_task();
   }
 }
+//--------------------------------------------------------------------+
+// ADC & DMA Function
+//--------------------------------------------------------------------+
+
+void dma_handler(void){
+  // Clear the interrupt
+  dma_hw->ints0 = 1u << dma_channel;
+
+  // Toggle the buffers
+  if (current_buffer == buffer1) {
+      current_buffer = buffer2;
+      next_buffer = buffer1;
+  } else {
+      current_buffer = buffer1;
+      next_buffer = buffer2;
+  }
+
+  buffer_filled = true;  // Mark the buffer as filled
+
+  // Reconfigure DMA to use the next buffer
+  dma_channel_configure(
+      dma_channel,
+      &dma_config,
+      current_buffer,             // Destination buffer
+      &adc_hw->fifo,           // Source: ADC FIFO
+      BUFFER_SIZE,             // Number of transfers
+      true                     // Start the transfer immediately
+  );
+}
+void setup_adc_dma(void){
+  // Initialize ADC
+  adc_init();
+  adc_gpio_init(26);  // Use GPIO 26 as ADC input
+  adc_select_input(0); // Select ADC input channel 0
+
+  // Configure ADC FIFO
+  adc_fifo_setup(
+      true,          // Enable FIFO
+      true,          // Enable DMA data request (DREQ)
+      4,             // Number of samples in FIFO before request
+      false,         // Disable error bit
+      false          // No shift results to 12-bit
+  );
+
+  // Enable ADC
+  adc_run(true);
+
+  // Initialize DMA
+  dma_channel = dma_claim_unused_channel(true);
+  dma_config = dma_channel_get_default_config(dma_channel);
+  channel_config_set_transfer_data_size(&dma_config, DMA_SIZE_16);  // 16-bit transfers
+  channel_config_set_read_increment(&dma_config, false);            // No increment for ADC FIFO
+  channel_config_set_write_increment(&dma_config, true);            // Increment destination buffer
+  channel_config_set_dreq(&dma_config, DREQ_ADC);                   // Trigger on ADC FIFO
+
+  // Set initial buffer pointers
+  current_buffer = buffer1;
+  next_buffer = buffer2;
+
+  // Configure DMA to use buffer1 initially
+  dma_channel_configure(
+      dma_channel,
+      &dma_config,
+      current_buffer,          // Destination buffer
+      &adc_hw->fifo,           // Source: ADC FIFO
+      BUFFER_SIZE,             // Number of transfers
+      true                     // Start the transfer immediately
+  );
+
+  // Set up DMA interrupt
+  irq_set_exclusive_handler(DMA_IRQ_0, dma_handler);
+  irq_set_enabled(DMA_IRQ_0, true);
+  dma_channel_set_irq0_enabled(dma_channel, true);
+}
+void send_data_to_usb(void){
+  if (buffer_filled) {
+      // Send current_buffer data via USB CDC
+      // (Replace with your USB CDC transmission code)
+      echo_all((uint8_t *)next_buffer, BUFFER_SIZE * sizeof(uint16_t));
+      buffer_filled = false;  // Mark buffer as free for the next DMA transfer
+  }
+}
 
 // send characters to both CDC and WebUSB
 void echo_all(uint8_t buf[], uint32_t count)
 {
+  // TODO: always send raw data no conversation.
   // echo to web serial
   if ( web_serial_connected )
   {
@@ -240,14 +351,16 @@ void webserial_task(void)
 {
   if ( web_serial_connected )
   {
-    if ( tud_vendor_available() )
-    {
-      uint8_t buf[64];
-      uint32_t count = tud_vendor_read(buf, sizeof(buf));
+    send_data_to_usb();
+    // if ( tud_vendor_available() )
+    // {
+    //   send_data_to_usb();
+    //   // uint8_t buf[64];
+    //   // uint32_t count = tud_vendor_read(buf, sizeof(buf));
 
-      // echo back to both web serial and cdc
-      echo_all(buf, count);
-    }
+    //   // // echo back to both web serial and cdc
+    //   // echo_all(buf, count);
+    // }
   }
 }
 
@@ -259,16 +372,18 @@ void cdc_task(void)
 {
   if ( tud_cdc_connected() )
   {
+    send_data_to_usb();
     // connected and there are data available
-    if ( tud_cdc_available() )
-    {
-      uint8_t buf[64];
+    // if ( tud_cdc_available() )
+    // {
+    //   send_data_to_usb();
+    //   // uint8_t buf[64];
 
-      uint32_t count = tud_cdc_read(buf, sizeof(buf));
+    //   // uint32_t count = tud_cdc_read(buf, sizeof(buf));
 
-      // echo back to both web serial and cdc
-      echo_all(buf, count);
-    }
+    //   // // echo back to both web serial and cdc
+    //   // echo_all(buf, count);
+    // }
   }
 }
 
