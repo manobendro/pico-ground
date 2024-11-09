@@ -90,16 +90,16 @@ static bool web_serial_connected = false;
 
 // Define buffer size and buffers
 #define BUFFER_SIZE 1024
-uint16_t buffer1[BUFFER_SIZE];
-uint16_t buffer2[BUFFER_SIZE];
+uint8_t buffer1[BUFFER_SIZE];
+uint8_t buffer2[BUFFER_SIZE];
 
 // DMA channel and configuration
 uint dma_channel;
 dma_channel_config dma_config;
 
 // Pointer to the current buffer being filled
-uint16_t* current_buffer;
-uint16_t* next_buffer;
+uint8_t* current_buffer;
+uint8_t* next_buffer;
 
 // Flag to indicate buffer state
 volatile bool buffer_filled = false;
@@ -189,7 +189,7 @@ void setup_adc_dma(void){
       true,          // Enable DMA data request (DREQ)
       4,             // Number of samples in FIFO before request
       false,         // Disable error bit
-      false          // No shift results to 12-bit
+      true          // No shift results to 12-bit
   );
 
   // Enable ADC
@@ -198,7 +198,7 @@ void setup_adc_dma(void){
   // Initialize DMA
   dma_channel = dma_claim_unused_channel(true);
   dma_config = dma_channel_get_default_config(dma_channel);
-  channel_config_set_transfer_data_size(&dma_config, DMA_SIZE_16);  // 16-bit transfers
+  channel_config_set_transfer_data_size(&dma_config, DMA_SIZE_8);  // 16-bit transfers
   channel_config_set_read_increment(&dma_config, false);            // No increment for ADC FIFO
   channel_config_set_write_increment(&dma_config, true);            // Increment destination buffer
   channel_config_set_dreq(&dma_config, DREQ_ADC);                   // Trigger on ADC FIFO
@@ -231,7 +231,7 @@ void send_data_to_usb(void){
     // echo_all((uint8_t *)next_buffer, BUFFER_SIZE * sizeof(uint16_t));
     if ( web_serial_connected )
     {
-      tud_vendor_write((uint8_t *)next_buffer, BUFFER_SIZE * sizeof(uint16_t));
+      tud_vendor_write((uint8_t *)next_buffer, BUFFER_SIZE * sizeof(uint8_t));
       tud_vendor_write_flush();
     }
     buffer_filled = false;  // Mark buffer as free for the next DMA transfer
