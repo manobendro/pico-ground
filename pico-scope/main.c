@@ -89,7 +89,7 @@ const tusb_desc_webusb_url_t desc_url =
 static bool web_serial_connected = false;
 
 // Define buffer size and buffers
-#define BUFFER_SIZE 256
+#define BUFFER_SIZE 1024
 uint16_t buffer1[BUFFER_SIZE];
 uint16_t buffer2[BUFFER_SIZE];
 
@@ -114,9 +114,18 @@ void dma_handler(void);
 void setup_adc_dma(void);
 void send_data_to_usb(void);
 
+#define PIN 4
+
+bool led_value = false;
+
 /*------------- MAIN -------------*/
 int main(void)
 {
+
+  // stdio_init_all();
+  gpio_init(PIN);
+  gpio_set_dir(PIN, GPIO_OUT);
+
   board_init();
 
   // init device stack on configured roothub port
@@ -215,10 +224,17 @@ void setup_adc_dma(void){
 }
 void send_data_to_usb(void){
   if (buffer_filled) {
-      // Send current_buffer data via USB CDC
-      // (Replace with your USB CDC transmission code)
-      echo_all((uint8_t *)next_buffer, BUFFER_SIZE * sizeof(uint16_t));
-      buffer_filled = false;  // Mark buffer as free for the next DMA transfer
+    // gpio_put(PIN, led_value);
+    // led_value = !led_value;
+    // Send current_buffer data via USB CDC
+    // (Replace with your USB CDC transmission code)
+    // echo_all((uint8_t *)next_buffer, BUFFER_SIZE * sizeof(uint16_t));
+    if ( web_serial_connected )
+    {
+      tud_vendor_write((uint8_t *)next_buffer, BUFFER_SIZE * sizeof(uint16_t));
+      tud_vendor_write_flush();
+    }
+    buffer_filled = false;  // Mark buffer as free for the next DMA transfer
   }
 }
 

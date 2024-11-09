@@ -42,7 +42,7 @@ target_include_directories(pico_scope PUBLIC
 
 # In addition to pico_stdlib required for common PicoSDK functionality, add dependency on tinyusb_device
 # for TinyUSB device support and tinyusb_board for the additional board support library used by the example
-target_link_libraries(pico_scope PUBLIC pico_stdlib hardware_adc hardware_dma pico_unique_id tinyusb_device tinyusb_board)
+target_link_libraries(pico_scope PUBLIC pico_stdlib hardware_adc hardware_gpio hardware_dma pico_unique_id tinyusb_device tinyusb_board)
 
 # Disabling USB and enabling UART serial
 pico_enable_stdio_uart(pico_scope 1)
